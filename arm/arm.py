@@ -25,17 +25,17 @@ class Arm:
     
     def close(self):
         '''Sends PWM signals to close arm'''
-        self.pi.set_servo_pulsewidth(self.pin, armCloseWidth)
+        self.pi.setServoPulsewidth(self.pin, armCloseWidth)
 
     def open(self):
         '''Sends PWM signals to open arm'''
         print("opening arm")
-        self.pi.set_servo_pulsewidth(self.pin, armOpenWidth)
+        self.pi.setServoPulsewidth(self.pin, armOpenWidth)
 
     # Neutral signal
     def stop(self):
         '''Neutral signal'''
-        self.pi.set_servo_pulsewidth(self.pin, armNeutralWidth)
+        self.pi.setServoPulsewidth(self.pin, armNeutralWidth)
 
 if __name__ == "__main__":
     # Testing
