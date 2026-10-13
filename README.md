@@ -1,1 +1,1 @@
-To be determined (the previous year's code was so bad that we're pretty much redoing it all)
+To be determined (the previous year's code was so bad that we're pretty much fixing it all)
