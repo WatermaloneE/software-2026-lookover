@@ -1,39 +1,41 @@
+from getopt import error
+
 import pigpio
 import time
 
 # Establish the necessary PWM signal widths/durations (in microseconds)
-ARM_CLOSE_WIDTH = 1600
-ARM_NEUTRAL_WIDTH = 1500
-ARM_OPEN_WIDTH = 1400
+armCloseWidth = 1600
+armNeutralWidth = 1500
+armOpenWidth = 1400
 
 class Arm:
     """Create and manage arm"""
 
-    def __init__(self, pigpio_ip, pigpio_port, arm_signal_pin):
+    def __init__(self, pigpioIp, pigpioPort, armSignalInput):
         # Intialize pigpio
         try: 
-            self.pi = pigpio.pi(pigpio_ip, pigpio_port)
-        except:
-            print("Failed to connect to pigpio daemon")
+            self.pi = pigpio.pi(pigpioIp, pigpioPort) # intalizes self.pi
+        except Exception as e:
+            print("Failed to connect to pigpio daemon or other Exception: "+ e) #Idk the exact error to look for so this will work
         
         # Initalize arm
-        self.pin = arm_signal_pin 
+        self.pin = armSignalInput
         self.pi.set_mode(self.pin, pigpio.OUTPUT) #listener
         self.pi.set_PWM_frequency(self.pin, 50) # Set frequency to 50Hz 
     
     def close(self):
         '''Sends PWM signals to close arm'''
-        self.pi.set_servo_pulsewidth(self.pin, ARM_CLOSE_WIDTH)
+        self.pi.set_servo_pulsewidth(self.pin, armCloseWidth)
 
     def open(self):
         '''Sends PWM signals to open arm'''
         print("opening arm")
-        self.pi.set_servo_pulsewidth(self.pin, ARM_OPEN_WIDTH)
+        self.pi.set_servo_pulsewidth(self.pin, armOpenWidth)
 
     # Neutral signal
     def stop(self):
         '''Neutral signal'''
-        self.pi.set_servo_pulsewidth(self.pin, ARM_NEUTRAL_WIDTH)
+        self.pi.set_servo_pulsewidth(self.pin, armNeutralWidth)
 
 if __name__ == "__main__":
     # Testing
