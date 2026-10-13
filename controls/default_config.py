@@ -7,6 +7,7 @@
 # Each action: [primary, fallback]
 
 
+<<<<<<< HEAD
 """
 What this does:
 
@@ -21,6 +22,9 @@ The "degree of freedom" is then mapped to a index, that index is then use to acc
 """
 
 default_config = {
+=======
+defaultConfig = {
+>>>>>>> 39bed7768b7c8fb63bf04fc8f2d91fb1667cb874
     "Controller": {
         "Up": [4, None],
         "Down": [2, None],
