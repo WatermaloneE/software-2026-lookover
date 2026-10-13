@@ -8,7 +8,7 @@
 # Each action: [primary, fallback]
 
 
-default_config = {
+defaultConfig = {
     "Controller": {
         "Up":                           [4, None],
         "Down":                         [2, None],

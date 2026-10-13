@@ -2,26 +2,26 @@ import pygame
 import copy #for deep copying the default config to avoid mutating it when creating new Controller instances
 import numpy as np
 try:
-    from .default_config import ACTION_TO_DOF
+    from .defaultConfig import ACTION_TO_DOF
 except ImportError:
     print("Default config could not be found")
 
 class Controller:
-    def __init__(self, joystick, config_file = None, default_config = None):
+    def __init__(self, joystick, configFile = None, defaultConfig = None):
         # Initialize pygame and joystick
         pygame.init()
         pygame.joystick.init()
         screen = pygame.display.set_mode((1, 1))  # 1x1 pixel, basically invisible
         pygame.display.iconify()    # immediately minimizes it
-        self.dof_to_index = {"surge": 0, "sway": 1, "heave": 2, "roll": 3, "pitch": 4, "yaw": 5}  
-        self.keys_held = set()  # Track currently held keys for repeat handling
-        self.action_function_map = {} # Map actions to their corresponding functions 
+        self.dofToIndex = {"surge": 0, "sway": 1, "heave": 2, "roll": 3, "pitch": 4, "yaw": 5}
+        self.keysHeld = set()  # Track currently held keys for repeat handling
+        self.actionFunctionMap = {} # Map actions to their corresponding functions
 
         # Load configuration for input bindings
-        if config_file is None:
-            self.config = copy.deepcopy(default_config)
+        if configFile is None:
+            self.config = copy.deepcopy(defaultConfig)
         else:
-            self.config = copy.deepcopy(config_file) # Load config from file if provided, otherwise use default
+            self.config = copy.deepcopy(configFile) # Load config from file if provided, otherwise use default
 
         # Establishes joystick details if available
         joystick_count = pygame.joystick.get_count()
@@ -47,15 +47,15 @@ class Controller:
 
     def bind_action_to_function(self, action, func):
         # Binds a function to a specific action
-        print(type(self.action_function_map))
-        self.action_function_map[action] = func
+        print(type(self.actionFunctionMap))
+        self.actionFunctionMap[action] = func
 
     def send_command(self, action, raw_value):
         print(f"[COMMAND] Action: '{action}' | Raw value: {raw_value}")
 
         # Attempt to call the bound function for this action 
         try:
-            self.action_function_map[action]()
+            self.actionFunctionMap[action]()
         except KeyError:
             print(f"Function not bound to action: '{action}'")
 
@@ -106,7 +106,7 @@ class Controller:
             
             # handle KEYBOARD key events with key repeat enabled for held keys
             elif event.type == pygame.KEYDOWN:
-                self.keys_held.add(pygame.key.name(event.key))
+                self.keysHeld.add(pygame.key.name(event.key))
                 pygame.key.set_repeat(200, 50) # Enable key repeat with a delay of 200ms and interval of 50ms
                 
                 if event.key == pygame.K_ESCAPE:
@@ -115,17 +115,17 @@ class Controller:
                     exit()
                     
                 print(f" {pygame.key.name(event.key)}")
-                key_name = pygame.key.name(event.key)
+                keyName = pygame.key.name(event.key)
                 # Check if this key is bound to any action in the config
-                action = self.find_action("Keyboard", key_name)
+                action = self.find_action("Keyboard", keyName)
                 if action:
-                    print(f"[Key '{key_name}'] -> '{action}'")
-                    self.send_command(action, key_name)
+                    print(f"[Key '{keyName}'] -> '{action}'")
+                    self.send_command(action, keyName)
                 else:
-                    print(f"[Key '{key_name}'] -> No binding found")
+                    print(f"[Key '{keyName}'] -> No binding found")
 
             elif event.type == pygame.KEYUP:
-                self.keys_held.discard(pygame.key.name(event.key))  # Remove key from held set on release
+                self.keysHeld.discard(pygame.key.name(event.key))  # Remove key from held set on release
             ''''''''''''''''''''''
             elif event.type in (pygame.JOYDEVICEADDED, pygame.JOYDEVICEREMOVED):
                 pygame.joystick.quit()
@@ -150,14 +150,14 @@ class Controller:
                 action = self.find_action("Controller", input_key)
                 if action and action in ACTION_TO_DOF:
                     dof, scale = ACTION_TO_DOF[action]
-                    vec[self.dof_to_index[dof]] += raw
+                    vec[self.dofToIndex[dof]] += raw
 
         for btn in range(self.controller.get_numbuttons()):
             if self.controller.get_button(btn):
                 action = self.find_action("Controller", btn)
                 if action and action in ACTION_TO_DOF:
                     dof, scale = ACTION_TO_DOF[action]
-                    vec[self.dof_to_index[dof]] += scale
+                    vec[self.dofToIndex[dof]] += scale
         
         for hat in range(self.controller.get_numhats()):
             value = self.controller.get_hat(hat)
@@ -169,15 +169,15 @@ class Controller:
                     action = self.find_action("Controller", input_key)
                     if action and action in ACTION_TO_DOF:
                         dof, scale = ACTION_TO_DOF[action]
-                        vec[self.dof_to_index[dof]] += scale
+                        vec[self.dofToIndex[dof]] += scale
 
     #polls for inputs and check if it's connected to a movement action, if yes, change zero to 1 or -1 with respect to its index
     def read_keyboard(self, vec): 
-        for key_name in self.keys_held:
-            action = self.find_action("Keyboard", key_name)
+        for keyName in self.keysHeld:
+            action = self.find_action("Keyboard", keyName)
             if action and action in ACTION_TO_DOF:
                 dof, scale = ACTION_TO_DOF[action]
-                vec[self.dof_to_index[dof]] += scale
+                vec[self.dofToIndex[dof]] += scale
     
     
     def get_input_vector(self):
