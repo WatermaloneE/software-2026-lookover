@@ -27,7 +27,7 @@ mixer = np.array([
     #[ 0,  0,   1,  -1,  -1,  0], # Middle Back Left
     #[ 0,  0,   1,   1,  -1,  0]  # Middle Back Right
 ])
-#format for thruster outputs is [FL, FR, BL, BR, MFL, MFR, MBL, MBR]
+#format for thruster outputs is [FrontLeft, FrontRight, BackLeft, BackRight, MiddleFrontLeft, MiddleFrontRight, MiddleBackLeft, MiddleBackRight]
 
 thruster_pins = [16,17,27,22,25,26]  # Example GPIO pins for 8 thrusters/ESCs
 
@@ -36,7 +36,7 @@ class Thruster:
     def __init__(self, pigpio_ip, pigpio_port, mixer, thruster_pins):
         # intialize pigpio
         try: 
-            self.pi = pigpio.pi(pigpio_ip, pigpio_port)
+            self.pi = pigpio.pi(pigpio_ip, pigpio_port) # self.pi intalize
         except:
             print("Failed to connect to pigpio daemon")
 
