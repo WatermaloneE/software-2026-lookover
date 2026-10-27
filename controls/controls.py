@@ -9,16 +9,12 @@ except ImportError:
 
 
 class Controller:
-<<<<<<< HEAD
     def __init__(self, joystick, config_file=None, default_config=None):
-=======
     def __init__(self, joystick, configFile = None, defaultConfig = None):
->>>>>>> 39bed7768b7c8fb63bf04fc8f2d91fb1667cb874
         # Initialize pygame and joystick
         pygame.init()
         pygame.joystick.init()
         screen = pygame.display.set_mode((1, 1))  # 1x1 pixel, basically invisible
-<<<<<<< HEAD
         pygame.display.iconify()  # immediately minimizes it
         self.dof_to_index = {
             "surge": 0,
@@ -30,24 +26,19 @@ class Controller:
         }
         self.keys_held = set()  # Track currently held keys for repeat handling
         self.action_function_map = {}  # Map actions to their corresponding functions
-=======
         pygame.display.iconify()    # immediately minimizes it
         self.dofToIndex = {"surge": 0, "sway": 1, "heave": 2, "roll": 3, "pitch": 4, "yaw": 5}
         self.keysHeld = set()  # Track currently held keys for repeat handling
         self.actionFunctionMap = {} # Map actions to their corresponding functions
->>>>>>> 39bed7768b7c8fb63bf04fc8f2d91fb1667cb874
 
         # Load configuration for input bindings
         if configFile is None:
             self.config = copy.deepcopy(defaultConfig)
         else:
-<<<<<<< HEAD
             self.config = copy.deepcopy(
                 config_file
             )  # Load config from file if provided, otherwise use default
-=======
             self.config = copy.deepcopy(configFile) # Load config from file if provided, otherwise use default
->>>>>>> 39bed7768b7c8fb63bf04fc8f2d91fb1667cb874
 
         # Establishes joystick details if available
         joystick_count = pygame.joystick.get_count()
@@ -139,17 +130,14 @@ class Controller:
 
             # handle KEYBOARD key events with key repeat enabled for held keys
             elif event.type == pygame.KEYDOWN:
-<<<<<<< HEAD
                 self.keys_held.add(pygame.key.name(event.key))
                 pygame.key.set_repeat(
                     200, 50
                 )  # Enable key repeat with a delay of 200ms and interval of 50ms
 
-=======
                 self.keysHeld.add(pygame.key.name(event.key))
                 pygame.key.set_repeat(200, 50) # Enable key repeat with a delay of 200ms and interval of 50ms
                 
->>>>>>> 39bed7768b7c8fb63bf04fc8f2d91fb1667cb874
                 if event.key == pygame.K_ESCAPE:
                     # escape key to quit the program
                     pygame.quit()
@@ -166,7 +154,6 @@ class Controller:
                     print(f"[Key '{keyName}'] -> No binding found")
 
             elif event.type == pygame.KEYUP:
-<<<<<<< HEAD
                 self.keys_held.discard(
                     pygame.key.name(event.key)
                 )  # Remove key from held set on release
@@ -205,13 +192,10 @@ class Controller:
                 action = self.find_action("Controller", btn)
                 if action and action in ACTION_TO_DOF:
                     dof, scale = ACTION_TO_DOF[action]
-<<<<<<< HEAD
                     vec[self.dof_to_index[dof]] += scale
 
-=======
                     vec[self.dofToIndex[dof]] += scale
-        
->>>>>>> 39bed7768b7c8fb63bf04fc8f2d91fb1667cb874
+
         for hat in range(self.controller.get_numhats()):
             value = self.controller.get_hat(hat)
             for direction in [
@@ -229,7 +213,6 @@ class Controller:
                         dof, scale = ACTION_TO_DOF[action]
                         vec[self.dofToIndex[dof]] += scale
 
-<<<<<<< HEAD
     # polls for inputs and check if it's connected to a movement action, if yes, change zero to 1 or -1 with respect to its index
     def read_keyboard(self, vec):
         for key_name in self.keys_held:
@@ -238,7 +221,6 @@ class Controller:
                 dof, scale = ACTION_TO_DOF[action]
                 vec[self.dof_to_index[dof]] += scale
 
-=======
     #polls for inputs and check if it's connected to a movement action, if yes, change zero to 1 or -1 with respect to its index
     def read_keyboard(self, vec): 
         for keyName in self.keysHeld:
@@ -248,7 +230,6 @@ class Controller:
                 vec[self.dofToIndex[dof]] += scale
     
     
->>>>>>> 39bed7768b7c8fb63bf04fc8f2d91fb1667cb874
     def get_input_vector(self):
         vec = np.zeros(6)
         if self.controller:
