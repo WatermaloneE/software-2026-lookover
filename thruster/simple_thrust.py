@@ -18,14 +18,14 @@ AMPERAGE_LIMIT = 25 # Max amperage for thrusters
 amperage_limit_per_unit = 10 # Set during initialization 
 
 mixer = np.array([
-    [ S,  S,   0,   0,   0,  1], # FL
-    [-S,  S,   0,   0,   0, -1], # FR
-    [-S, -S,   0,   0,   0,  1], # BL
-    [ S, -S,   0,   0,   0, -1], # BR
-    [ 0,  0,   1,  -1,   1,  0], # MFL
-    [ 0,  0,   1,   1,   1,  0], # MFR
-    #[ 0,  0,   1,  -1,  -1,  0], # MBL
-    #[ 0,  0,   1,   1,  -1,  0]  # MBR
+    [ S,  S,   0,   0,   0,  1], # Front Left
+    [-S,  S,   0,   0,   0, -1], # Front Right
+    [-S, -S,   0,   0,   0,  1], # Back Left
+    [ S, -S,   0,   0,   0, -1], # Back Right
+    [ 0,  0,   1,  -1,   1,  0], # Middle Front Left
+    [ 0,  0,   1,   1,   1,  0], # Middle Front Right
+    #[ 0,  0,   1,  -1,  -1,  0], # Middle Back Left
+    #[ 0,  0,   1,   1,  -1,  0]  # Middle Back Right
 ])
 #format for thruster outputs is [FL, FR, BL, BR, MFL, MFR, MBL, MBR]
 
