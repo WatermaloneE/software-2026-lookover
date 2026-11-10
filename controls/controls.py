@@ -9,54 +9,55 @@ except ImportError:
 
 
 class Controller:
-    def __init__(self, joystick, configFile = None, defaultConfig = None):
+    def __init__(self, joystick, config_file=None, default_config=None, configFile=None):
+        def __init__(self, joystick, configFile = None, defaultConfig = None):
 
-        # Initialize pygame and joystick
-        pygame.init()
-        pygame.joystick.init()
-        screen = pygame.display.set_mode((1, 1))  # 1x1 pixel, basically invisible
-        pygame.display.iconify()  # immediately minimizes it
-        self.dof_to_index = {
-            "surge": 0,
-            "sway": 1,
-            "heave": 2,
-            "roll": 3,
-            "pitch": 4,
-            "yaw": 5,
-        }
-        self.keys_held = set()  # Track currently held keys for repeat handling
-        self.action_function_map = {}  # Map actions to their corresponding functions
-        pygame.display.iconify()    # immediately minimizes it
-        self.dofToIndex = {"surge": 0, "sway": 1, "heave": 2, "roll": 3, "pitch": 4, "yaw": 5}
-        self.keysHeld = set()  # Track currently held keys for repeat handling
-        self.actionFunctionMap = {} # Map actions to their corresponding functions
+            # Initialize pygame and joystick
+            pygame.init()
+            pygame.joystick.init()
+            screen = pygame.display.set_mode((1, 1))  # 1x1 pixel, basically invisible
+            pygame.display.iconify()  # immediately minimizes it
+            self.dof_to_index = {
+                "surge": 0,
+                "sway": 1,
+                "heave": 2,
+                "roll": 3,
+                "pitch": 4,
+                "yaw": 5,
+            }
+            self.keys_held = set()  # Track currently held keys for repeat handling
+            self.action_function_map = {}  # Map actions to their corresponding functions
+            pygame.display.iconify()    # immediately minimizes it
+            self.dofToIndex = {"surge": 0, "sway": 1, "heave": 2, "roll": 3, "pitch": 4, "yaw": 5}
+            self.keysHeld = set()  # Track currently held keys for repeat handling
+            self.actionFunctionMap = {} # Map actions to their corresponding functions
 
-        # Load configuration for input bindings
-        if configFile is None:
-            self.config = copy.deepcopy(defaultConfig)
-        else:
-            self.config = copy.deepcopy(
-                configFile
-            )  # Load config from file if provided, otherwise use default
-            self.config = copy.deepcopy(configFile) # Load config from file if provided, otherwise use default
+            # Load configuration for input bindings
+            if configFile is None:
+                self.config = copy.deepcopy(defaultConfig)
+            else:
+                self.config = copy.deepcopy(
+                    config_file
+                )  # Load config from file if provided, otherwise use default
+                self.config = copy.deepcopy(configFile) # Load config from file if provided, otherwise use default
 
-        # Establishes joystick details if available
-        joystick_count = pygame.joystick.get_count()
-        if joystick_count > 0:
-            self.controller = pygame.joystick.Joystick(joystick)
-            self.controller.init()
-            num_hats = self.controller.get_numhats()
-            num_axis = self.controller.get_numaxes()
-            num_buttons = self.controller.get_numbuttons()
-            print(
-                f"Joystick Name: {self.controller.get_name()}, Number of hats: {num_hats}, Number of axes: {num_axis}, Number of buttons: {num_buttons}"
-            )
-        else:
-            print("No joysticks connected. Using keyboard controls.")
-            print("Keyboard controls enabled.")
-            self.controller = (
-                None  # Set controller to None to indicate we're using keyboard controls
-            )
+            # Establishes joystick details if available
+            joystick_count = pygame.joystick.get_count()
+            if joystick_count > 0:
+                self.controller = pygame.joystick.Joystick(joystick)
+                self.controller.init()
+                num_hats = self.controller.get_numhats()
+                num_axis = self.controller.get_numaxes()
+                num_buttons = self.controller.get_numbuttons()
+                print(
+                    f"Joystick Name: {self.controller.get_name()}, Number of hats: {num_hats}, Number of axes: {num_axis}, Number of buttons: {num_buttons}"
+                )
+            else:
+                print("No joysticks connected. Using keyboard controls.")
+                print("Keyboard controls enabled.")
+                self.controller = (
+                    None  # Set controller to None to indicate we're using keyboard controls
+                )
 
     def find_action(self, input_type, input_key):
         # Search through the config for the given input type then input key to find the corresponding action
