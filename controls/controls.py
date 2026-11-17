@@ -57,10 +57,10 @@ class Controller:
                 None  # Set controller too None to indicate we're using keyboard controls
             )
 
-    def findAction(self, input_type, input_key):
+    def findAction(self, inputType, inputKey):
         # Search through the config for the given input type then input key to find the corresponding action
-        for action, bindings in self.config.get(input_type, {}).items():
-            if input_key in bindings:
+        for action, bindings in self.config.get(inputType, {}).items():
+            if inputKey in bindings:
                 return action
         return None
 
@@ -69,8 +69,8 @@ class Controller:
         print(type(self.actionFunctionMap))
         self.actionFunctionMap[action] = func
 
-    def sendCommand(self, action, raw_value):
-        print(f"[COMMAND] Action: '{action}' | Raw value: {raw_value}")
+    def sendCommand(self, action, rawValue):
+        print(f"[COMMAND] Action: '{action}' | Raw value: {rawValue}")
 
         # Attempt to call the bound function for this action
         try:
