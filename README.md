@@ -26,4 +26,3 @@ TBA
   - Blue Robotics Bar 02 Pressure Sensor
   - 20 kg Servo
 
-![img](https://media.tenor.com/lVIuYsJXHzEAAAAM/spongebob-dancing.gif)
