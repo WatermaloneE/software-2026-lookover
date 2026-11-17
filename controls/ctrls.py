@@ -5,9 +5,9 @@ Use main.py to run the actual program. copy the code below to main.py and fine t
 
 import pygame
 from controls import Controller
-from default_config import default_config
+from default_config import defaultConfig
 
-ctrls = Controller(0, default_config=default_config)
+ctrls = Controller(0, default_config=defaultConfig)
 
 running = True
 
