@@ -220,13 +220,6 @@ class Controller:
                 dof, scale = ACTION_TO_DOF[action]
                 vec[self.dofToIndex[dof]] += scale
 
-    #polls for inputs and check if it's connected to a movement action, if yes, change zero to 1 or -1 with respect to its index
-    def read_keyboard(self, vec): 
-        for keyName in self.keysHeld:
-            action = self.findAction("Keyboard", keyName)
-            if action and action in ACTION_TO_DOF:
-                dof, scale = ACTION_TO_DOF[action]
-                vec[self.dofToIndex[dof]] += scale
     
     
     def get_input_vector(self):
