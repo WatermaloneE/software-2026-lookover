@@ -9,7 +9,7 @@ except ImportError:
 
 
 class Controller:
-    def __init__(self, joystick, config_file=None, defaultConfig=None, configFile=None):
+    def __init__(self, joystick, defaultConfig=None, configFile=None):
         # Initialize pygame and joystick
         pygame.init()
         pygame.joystick.init()
