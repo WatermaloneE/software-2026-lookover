@@ -26,4 +26,5 @@ TBA
   - Blue Robotics Bar 02 Pressure Sensor
   - 20 kg Servo
 
-![img](https://media.tenor.com/lVIuYsJXHzEAAAAM/spongebob-dancing.gif)
+# Known Issues That Can Not Be Fixed ATM
+ - references to 192.168.0.2 may not work and  may acidently ping the router.

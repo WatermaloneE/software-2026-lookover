@@ -1,7 +1,7 @@
 import pygame
 
 # from dotenv import load_dotenv
-from controls.default_config import default_config
+from controls.default_config import defaultConfig
 from controls.controls import Controller
 from arm.arm import Arm
 from thruster.simple_thrust import Thruster, mixer
@@ -15,7 +15,7 @@ clock = pygame.time.Clock()
 running = True
 
 # Object initialization
-ctrls = Controller(0, default_config=default_config)
+ctrls = Controller(0, default_config=defaultConfig)
 ArmObj = Arm(PIGPIO_IP, PIGPIO_PORT_LIST, 23)
 ThrusterObj = Thruster(
     PIGPIO_IP, PIGPIO_PORT_LIST, mixer, [16, 17, 27, 22, 25, 26]
