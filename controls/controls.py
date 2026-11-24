@@ -3,41 +3,38 @@ import copy  # for deep copying the default config to avoid mutating it when cre
 import numpy as np
 
 try:
-    from .defaultConfig import ACTION_TO_DOF
+    from defaultConfig import ACTION_TO_DOF
 except ImportError:
-    print("Default config could not be found")
+    ACTION_TO_DOF = {}
 
 
 class Controller:
-    def __init__(self, joystick, config_file=None, default_config=None, configFile=None):
-        def __init__(self, joystick, configFile = None, defaultConfig = None):
+    def __init__(self, joystick, defaultConfig=None, configFile=None):
+        # Initialize pygame and joystick
+        pygame.init()
+        pygame.joystick.init()
+        pygame.display.iconify()  # immediately minimizes it
+        self.dof_to_index = {
+            "surge": 0,
+            "sway": 1,
+            "heave": 2,
+            "roll": 3,
+            "pitch": 4,
+            "yaw": 5,
+        }
+        self.keys_held = set()  # Track currently held keys for repeat handling
+        self.action_function_map = {}  # Map actions to their corresponding functions
+        pygame.display.iconify()    # immediately minimizes it
+        self.dofToIndex = {"surge": 0, "sway": 1, "heave": 2, "roll": 3, "pitch": 4, "yaw": 5}
+        self.keysHeld = set()  # Track currently held keys for repeat handling
+        self.actionFunctionMap = {} # Map actions to their corresponding functions
 
-            # Initialize pygame and joystick
-            pygame.init()
-            pygame.joystick.init()
-            screen = pygame.display.set_mode((1, 1))  # 1x1 pixel, basically invisible
-            pygame.display.iconify()  # immediately minimizes it
-            self.dof_to_index = {
-                "surge": 0,
-                "sway": 1,
-                "heave": 2,
-                "roll": 3,
-                "pitch": 4,
-                "yaw": 5,
-            }
-            self.keys_held = set()  # Track currently held keys for repeat handling
-            self.action_function_map = {}  # Map actions to their corresponding functions
-            pygame.display.iconify()    # immediately minimizes it
-            self.dofToIndex = {"surge": 0, "sway": 1, "heave": 2, "roll": 3, "pitch": 4, "yaw": 5}
-            self.keysHeld = set()  # Track currently held keys for repeat handling
-            self.actionFunctionMap = {} # Map actions to their corresponding functions
-
-        # Load configuration for input bindings
+    # Load configuration for input bindings
         if configFile is None:
             self.config = copy.deepcopy(defaultConfig)
         else:
             self.config = copy.deepcopy(
-                config_file
+                configFile
             )  # Load config from file if provided, otherwise use default
             self.config = copy.deepcopy(configFile) # Load config from file if provided, otherwise use default
 
@@ -68,7 +65,7 @@ class Controller:
 
     def bind_action_to_function(self, action, func):
         # Binds a function to a specific action
-        print(type(self.actionFunctionMap))
+        print(type(self.actionFunctionMap).__name__)
         self.actionFunctionMap[action] = func
 
     def sendCommand(self, action, rawValue):
@@ -175,6 +172,9 @@ class Controller:
 
     # polls for inputs and check if it's connected to a movement action, if yes, change zero to 1 or -1 with respect to its index
     def readGamepad(self, vec):
+        controller = self.controller
+        if controller is None:
+            return
         InvertedAxis = []
         for axis in range(self.controller.get_numaxes()):
             raw = float(self.controller.get_axis(axis))
@@ -227,7 +227,7 @@ class Controller:
     def get_input_vector(self):
         vec = np.zeros(6)
         if self.controller:
-            self.read_gamepad(vec)
+            self.readGamepad(vec)
         else:
             self.read_keyboard(vec)
         return np.clip(vec, -1.0, 1.0)  # Ensure values are between -1 and 1
