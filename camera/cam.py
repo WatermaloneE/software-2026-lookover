@@ -31,13 +31,14 @@ class Camera:
 
     def get_frame(self):
         """Get and display a video frame"""
-        ret, frame = self.cap.read()
+        read_ok, camera_frame = self.cap.read()
 
-        if not ret:
+        if not read_ok:
             print("Can't receive frame (stream end?). Exiting ...")
             return None
 
-        cv2.imshow("ROV CAM FEED", frame)
+        cv2.imshow("ROV CAM FEED", camera_frame)
+        return frame
 
     def release(self):
         """Close windows"""
