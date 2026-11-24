@@ -13,8 +13,8 @@ class ServerSocket:
     """Create and manage server sockets"""
     client_list = []
 
-    def __init__(self, host, port):
-        """Inititalize a TCP socket """
+    def __init__(self, host, socket_port):
+        """Initialize a TCP socket """
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Get instance
         self.socket.bind((host, port)) # Bind host and port
         self.socket.listen(5) # Enables server to accept connections
@@ -22,7 +22,7 @@ class ServerSocket:
         # For later use with select
         listening_socks.append(self.socket)
         server_socket_list.append(self)
-        print("Server socket created on port " + str(port))
+        print("Server socket created on port " + str(socket_port))
 
     def listen_for_client(self):
         """
@@ -44,9 +44,9 @@ class ServerSocket:
         ServerSocket.client_list.append(client)
         Thread(target=self.handle_new_client, args=(client,)).start()
 
-    def handle_new_client(self, client):
+    @staticmethod
+    def handle_new_client(client):
         """Handle clients when on new thread"""
-        cli_id = client['cli_id']
         cli_socket = client['cli_socket']
         while True:
             # Listen for messages
@@ -56,35 +56,39 @@ class ServerSocket:
             print(str(cli_msg))
 
 
-    def send_message(self, receipent_id, message):
-        '''Send a message to one client'''
+    def send_message(self, recipient_id, message):
+        """Send a message to one client"""
         
 
     def broadcast_message(self, sender_id, message):
-        '''Broadcast a message to all clients (testing purposes)'''
+        """Broadcast a message to all clients (testing purposes)"""
         for cli in self.client_list:
             cli_id = cli['cli_id']
             cli_socket = cli['cli_socket']
             if cli_id != sender_id:
                 cli_socket.send(message.encode())
 
-def find_matching_ServerSocket_obj(socket):
-    '''Find the ServerSocket object that corresponds to the socket that select is listening to'''
-    for server_socket in server_socket_list:
-        if server_socket.socket == socket:
-            return server_socket
+def find_matching_ServerSocket_obj(sock):
+    """Find the ServerSocket object that corresponds to the socket that select is listening to"""
+    for server_obj in server_socket_list:
+        if server_obj.socket == sock:
+            return server_obj
+
+    return None
         
 def read_multiple_sockets():
-    '''Read from multiple sockets using select'''
+    """Read from multiple sockets using select"""
     try:
         read_socks, write_socks, except_socks = select.select(listening_socks, [], [], 0.5)
         print("read_socks: " + str(read_socks))
-    except:
-        print("ts broken brochacho")
-    
+    except OSError as error:
+        print(f"select failed: {error}")
+        return
+
     for sock in read_socks:
-        server_socket = find_matching_ServerSocket_obj(sock)
-        server_socket.listen_for_client()
+        server_obj = find_matching_ServerSocket_obj(sock)
+        if server_obj is not None:
+            server_obj.listen_for_client()
 
 # Testing
 if __name__ == "__main__":
